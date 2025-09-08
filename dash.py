@@ -495,18 +495,11 @@ def handle_file_upload():
     """Enhanced file upload with immediate processing"""
     st.markdown("### 📤 Upload Your Waste Management Data")
     
-    uploaded_file = st.file_uploader(
-        "Choose a CSV file",
-        type=['csv'],
-        help="Upload your waste management data in CSV format",
-        key="file_uploader"
-    )
-    
+    uploaded_file = st.file_uploader("Upload CSV", type=["csv"])
     if uploaded_file is not None:
         try:
             # Read file
             df = pd.read_csv(uploaded_file)
-            
             st.success(f"✅ File uploaded successfully! {len(df)} records found.")
             
             # Show preview
@@ -519,13 +512,11 @@ def handle_file_upload():
                 processed_df = process_data(df)
             
             if processed_df is not None:
-                # Store in session state
                 st.session_state.df = processed_df
                 st.session_state.data_loaded = True
-                
                 st.success("✅ Data processed successfully! All metrics calculated.")
                 
-                # Show processed stats
+                # Show quick stats
                 col1, col2, col3, col4 = st.columns(4)
                 with col1:
                     st.metric("Communities", len(processed_df))
@@ -546,7 +537,6 @@ def handle_file_upload():
             return None
     
     return None
-
 # ===== ML MODEL =====
 class WastePredictionModel:
     def __init__(self):
